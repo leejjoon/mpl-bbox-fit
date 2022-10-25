@@ -13,6 +13,7 @@ class BboxHighlightText(BboxDrawingArea):
                  aspect=1, anchor="C", mode="contain", transform=None):
 
         # hlt.annotation_bbox.set_figure(self.fig)
+        self._hlt = hlt
         extent = hlt.annotation_bbox.get_window_extent()
 
         self._hlt_w, self._hlt_h = w, h = extent.width, extent.height
@@ -28,8 +29,11 @@ class BboxHighlightText(BboxDrawingArea):
 
         def set_scale(renrerer, bboxout):
             scale = bboxout.height / h
+            self.set_scale(scale)
             # print(bboxout, scale)
-            for ta in hlt.text_areas:
-                ta.set_scale(scale)
 
         self._pre_draw_hooks.append(set_scale)
+
+    def set_scale(self, scale):
+        for ta in self._hlt.text_areas:
+            ta.set_scale(scale)
