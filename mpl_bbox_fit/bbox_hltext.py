@@ -1,6 +1,7 @@
 # or
 
-from .bbox_image import BboxDrawingArea
+from .bbox_drawing_area import BboxDrawingArea
+from .bbox_fit_mode import BboxFitMode
 
 # For now, we assume HLT is already added to the axes, so that its figure has
 # been set. This is required fro now since get_window_extent in the init
@@ -14,9 +15,13 @@ class BboxHighlightText(BboxDrawingArea):
 
         # hlt.annotation_bbox.set_figure(self.fig)
         self._hlt = hlt
-        extent = hlt.annotation_bbox.get_window_extent()
 
-        self._hlt_w, self._hlt_h = w, h = extent.width, extent.height
+        a = hlt.annotation_bbox
+        renderer = a.figure._get_renderer()
+        extent = a.get_window_extent(renderer)
+        p = renderer.points_to_pixels(1.)
+
+        self._hlt_w, self._hlt_h = w, h = extent.width/p, extent.height/p
 
         super().__init__(bbox, extent=(-w/2, 0, w/2, h), clip=clip,
                          aspect=aspect, anchor=anchor, mode=mode,
@@ -27,10 +32,9 @@ class BboxHighlightText(BboxDrawingArea):
         # hlt.annotation_bbox.xycoords = self.get_bbox_transform()
         # hlt.annotation_bbox.boxcoords = self.get_bbox_transform()
 
-        def set_scale(renrerer, bboxout):
-            scale = bboxout.height / h
+        def set_scale(renderer, bboxout):
+            scale = bboxout.height / h / renderer.points_to_pixels(1.)
             self.set_scale(scale)
-            # print(bboxout, scale)
 
         self._pre_draw_hooks.append(set_scale)
 

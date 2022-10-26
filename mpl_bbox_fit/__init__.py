@@ -8,4 +8,7 @@
 # See https://github.com/pypa/setuptools/issues/1724#issuecomment-627241822
 from ._version import __version__
 
+from .bbox_fit_mode import BboxFitMode
 from .bbox_image import BboxImage
+from .bbox_drawing_area import BboxDrawingArea
+from .bbox_hltext import BboxHighlightText

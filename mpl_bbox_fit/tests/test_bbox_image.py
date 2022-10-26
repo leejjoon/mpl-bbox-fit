@@ -13,8 +13,8 @@ import matplotlib.transforms as mtrans
 import numpy as np
 
 
-@pytest.mark.mpl_image_compare(filename="test_example.png")
-def test_example():
+@pytest.mark.mpl_image_compare(filename="test_bbox_image.png")
+def test_bbox_image():
     fig, ax = plt.subplots()
     data = np.arange(100).reshape((10, 10))
 
@@ -35,9 +35,16 @@ def test_example():
                             origin="lower",
                             data=data,
                             cmap="viridis",
-                            aspect=1
+                            mode="contain"
                             )
 
     ax.add_artist(bbox_image2)
 
     return fig
+
+def main():
+    fig = test_example()
+    plt.show()
+
+if __name__ == '__main__':
+    main()
